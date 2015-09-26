@@ -80,22 +80,22 @@
                 </Menu>
             </menus>
         </MenuBar>
-      <ImageView fx:id="cameraView1" fitHeight="173.0" fitWidth="215.0" layoutX="1018.0" layoutY="204.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="greenThreshold" fitHeight="173.0" fitWidth="215.0" layoutX="1018.0" layoutY="204.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../../../1.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="cameraView11" fitHeight="173.0" fitWidth="215.0" layoutX="1018.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="cameraViewWithCircles" fitHeight="173.0" fitWidth="215.0" layoutX="1018.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../../../1.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="cameraView12" fitHeight="173.0" fitWidth="215.0" layoutX="1018.0" layoutY="380.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="redThreshold" fitHeight="173.0" fitWidth="215.0" layoutX="1018.0" layoutY="380.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../../../1.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="cameraView121" fitHeight="173.0" fitWidth="215.0" layoutX="1018.0" layoutY="554.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="blueThreshold" fitHeight="173.0" fitWidth="215.0" layoutX="1018.0" layoutY="554.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../../../1.png" />
          </image>
@@ -103,18 +103,18 @@
       <Separator layoutX="1.0" layoutY="757.0" prefHeight="8.0" prefWidth="1187.0" />
       <HBox layoutX="16.0" layoutY="778.0" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Slider blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" value="120.0" />
-            <Slider blockIncrement="1.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider blockIncrement="1.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="hGreenH" blockIncrement="1.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" value="120.0" />
+            <Slider fx:id="hGreenS" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="hGreenV" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
             <Separator orientation="VERTICAL" prefHeight="200.0" />
             <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <Slider blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider blockIncrement="1.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider blockIncrement="1.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="hRedH" blockIncrement="1.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="hRedS" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="hRedV" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
             <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <Slider max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider blockIncrement="1.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="hBlueH" max="180.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="hBlueS" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="hBlueV" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
          </children></HBox>
       <Label layoutX="18.0" layoutY="878.0" text="H  S  V" />
       <Label layoutX="131.0" layoutY="878.0" text="H  S  V" />
@@ -122,5 +122,27 @@
       <Label layoutX="21.0" layoutY="763.0" text="Green" />
       <Label layoutX="87.0" layoutY="762.0" text="Red" />
       <Label layoutX="139.0" layoutY="762.0" text="Blue" />
+      <HBox layoutX="212.0" layoutY="778.0" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Slider fx:id="lGreenH" blockIncrement="1.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" value="120.0" />
+            <Slider fx:id="lGreenS" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="lGreenV" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <Slider fx:id="lRedH" blockIncrement="1.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="lRedS" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="lRedV" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <Slider fx:id="lBlueH" max="180.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="lBlueS" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="lBlueV" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+         </children>
+      </HBox>
+      <Label layoutX="336.0" layoutY="762.0" text="Blue" />
+      <Label layoutX="218.0" layoutY="763.0" text="Green" />
+      <Label layoutX="215.0" layoutY="878.0" text="H  S  V" />
+      <Label layoutX="272.0" layoutY="878.0" text="H  S  V" />
+      <Label layoutX="284.0" layoutY="762.0" text="Red" />
+      <Label layoutX="328.0" layoutY="878.0" text="H  S  V" />
     </children>
 </AnchorPane>
