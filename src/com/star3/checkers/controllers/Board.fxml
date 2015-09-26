@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.star3.checkers.controllers.Controller">
     <children>
         <GridPane fx:id="gridPane" layoutX="300.0" layoutY="77.0" maxHeight="640.0" maxWidth="640.0" prefHeight="640.0" prefWidth="640.0">
             <columnConstraints>
@@ -144,5 +144,10 @@
       <Label layoutX="272.0" layoutY="878.0" text="H  S  V" />
       <Label layoutX="284.0" layoutY="762.0" text="Red" />
       <Label layoutX="328.0" layoutY="878.0" text="H  S  V" />
+      <Button layoutX="519.0" layoutY="781.0" mnemonicParsing="false" onAction="#takeAFuckingFrame" prefHeight="107.0" prefWidth="107.0" text="PIZGNIJ KLATKĘ" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" wrapText="true">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>

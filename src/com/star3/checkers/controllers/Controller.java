@@ -10,12 +10,9 @@ import com.star3.checkers.utils.MatrixToBufferedImageConverter;
 import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
@@ -24,7 +21,11 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -58,9 +59,82 @@ public class Controller {
     @FXML
     private Button submitPlayer2 = new Button();
 
-    VideoCapture capture = new VideoCapture(0);
 
-    BlockingQueue<Image> frameQueue = new ArrayBlockingQueue<>(10);
+    // Zmienne suwaków do kalibracji
+
+    //GREEN
+    @FXML
+    private Slider hGreenH = new Slider();
+
+    @FXML
+    private Slider hGreenS = new Slider();
+
+    @FXML
+    private Slider hGreenV = new Slider();
+
+    @FXML
+    private Slider lGreenH = new Slider();
+
+    @FXML
+    private Slider lGreenS = new Slider();
+
+    @FXML
+    private Slider lGreenV = new Slider();
+
+    //RED
+    @FXML
+    private Slider hRedH = new Slider();
+
+    @FXML
+    private Slider hRedS = new Slider();
+
+    @FXML
+    private Slider hRedV = new Slider();
+
+    @FXML
+    private Slider lRedH = new Slider();
+
+    @FXML
+    private Slider lRedS = new Slider();
+
+    @FXML
+    private Slider lRedV = new Slider();
+
+    //BLUE
+    @FXML
+    private Slider hBlueH = new Slider();
+
+    @FXML
+    private Slider hBlueS = new Slider();
+
+    @FXML
+    private Slider hBlueV = new Slider();
+
+    @FXML
+    private Slider lBlueH = new Slider();
+
+    @FXML
+    private Slider lBlueS = new Slider();
+
+    @FXML
+    private Slider lBlueV = new Slider();
+
+    //PARAMS
+    @FXML
+    private Slider param1 = new Slider();
+
+    @FXML
+    private Slider param2 = new Slider();
+
+    @FXML
+    private Slider param3 = new Slider();
+
+    @FXML
+    private Slider param4 = new Slider();
+
+
+    VideoCapture capture = new VideoCapture("http://192.168.1.6:8080/videofeed?dummyparam=dummy.mjpg");
+
     BlockingQueue<GridPane> pawns = new ArrayBlockingQueue<>(10);
 
     Imgproc ip = new Imgproc();
@@ -68,6 +142,20 @@ public class Controller {
     MatrixToBufferedImageConverter mbic = new MatrixToBufferedImageConverter();
     Pawn[][] oldBoard = new Pawn[8][8];
     MoveValidator moveValidator = new MoveValidator();
+
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+
+    synchronized public Mat getMainFrame() {
+        return mainFrame;
+    }
+
+    synchronized public void setMainFrame(Mat mainFrame) {
+        this.mainFrame = mainFrame;
+    }
+
+    private Mat mainFrame = new Mat();
 
     Mat hsvMatryx = new Mat();
 
@@ -99,13 +187,8 @@ public class Controller {
     private void initialize() {
         Thread readImage = new Thread(() -> {
             while (true) {
-                GridPane grid = new GridPane(); //queueOfPawns();
-                try {
-                    pawns.put(grid);
-                    Thread.sleep(5);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                Mat frame = getFrame(); //queueOfPawns();
+                setMainFrame(frame);
             }
 
         });
@@ -322,33 +405,6 @@ public class Controller {
 
     }
 
-
-    private Mat getFrame() {
-        //VideoCapture capture = new VideoCapture("http://192.168.1.6:8080/videofeed?dummyparam=dummy.mjpg");
-        //capture.open("http://192.168.1.6:8080/videofeed?dummyparam=dummy.mjpg");
-        Mat capturedFrame = new Mat();
-        Mat frameMatrix = capturedFrame;
-        if (capture.isOpened()) {
-            for (int i = 0; i < 20; i++) {
-                capture.read(frameMatrix);
-            }
-
-//            mbic.setMatrix(frameMatrix, ".png");
-//            BufferedImage bufim = mbic.getImage();
-//
-//            cameraView.setImage(SwingFXUtils.toFXImage(bufim, null));
-//
-//            BufferedImage bImage = SwingFXUtils.fromFXImage(SwingFXUtils.toFXImage(bufim, null), null);
-//            File f = new File("save.png");
-//            try {
-//                ImageIO.write(bImage, "png", f);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-
-        }
-        return capturedFrame;
-    }
 
     private Pawn[][] getBoard(Mat hsvMatrix, Collection<Pawn> red, Collection<Pawn> blue, ArrayList<Pawn> edges) {
 
@@ -623,5 +679,70 @@ public class Controller {
         } else {
             return false;
         }
+    }
+
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+    @FXML
+    private void takeAFuckingFrame() {
+        Mat frame = getMainFrame();
+        displayFrame(frame, cameraViewWithCircles);
+        saveFrameToFile(frame, "testFrame");
+    }
+
+    private Mat getFrame() {
+        setColorRanges();
+
+        Mat capturedFrame = new Mat();
+        Mat frameMatrix = capturedFrame;
+        if (capture.isOpened()) {
+            capture.read(capturedFrame);
+        }
+
+        return capturedFrame;
+    }
+
+    private void displayFrame(Mat frame, ImageView imgView) {
+        mbic.setMatrix(frame, ".png");
+        imgView.setImage(SwingFXUtils.toFXImage(mbic.getImage(), null));
+    }
+
+    private void saveFrameToFile(Mat frame, String fileName) {
+        mbic.setMatrix(frame, ".png");
+        BufferedImage bufim = mbic.getImage();
+
+        BufferedImage bImage = SwingFXUtils.fromFXImage(SwingFXUtils.toFXImage(bufim, null), null);
+        File f = new File(fileName + ".png");
+        try {
+            ImageIO.write(bImage, "png", f);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setColorRanges() {
+        greenHigh = new Scalar(hGreenH.getValue(), hGreenS.getValue(), hGreenV.getValue());
+        greenLow = new Scalar(lGreenH.getValue(), lGreenS.getValue(), lGreenV.getValue());
+
+        redHigh = new Scalar(hRedH.getValue(), hRedS.getValue(), hRedV.getValue());
+        redLow = new Scalar(lRedH.getValue(), lRedS.getValue(), lRedV.getValue());
+
+        blueHigh = new Scalar(hBlueH.getValue(), hBlueS.getValue(), hBlueV.getValue());
+        blueLow = new Scalar(lBlueH.getValue(), lBlueS.getValue(), lBlueV.getValue());
+    }
+
+    private ArrayList<Double> getHoughParams() {
+        ArrayList<Double> result = new ArrayList<>();
+
+        result.add(param1.getValue());
+        result.add(param2.getValue());
+        result.add(param3.getValue());
+        result.add(param4.getValue());
+
+        return result;
     }
 }
