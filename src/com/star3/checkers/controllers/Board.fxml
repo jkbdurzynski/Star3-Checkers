@@ -101,53 +101,61 @@
          </image>
       </ImageView>
       <Separator layoutX="1.0" layoutY="757.0" prefHeight="8.0" prefWidth="1187.0" />
-      <HBox layoutX="16.0" layoutY="778.0" prefHeight="100.0" prefWidth="200.0">
+      <HBox layoutX="16.0" layoutY="778.0" prefHeight="100.0" prefWidth="384.0">
          <children>
-            <Slider fx:id="hGreenH" blockIncrement="1.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" value="120.0" />
-            <Slider fx:id="hGreenS" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider fx:id="hGreenV" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <Slider fx:id="hRedH" blockIncrement="1.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider fx:id="hRedS" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider fx:id="hRedV" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <Slider fx:id="hBlueH" max="180.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider fx:id="hBlueS" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider fx:id="hBlueV" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="hGreenH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="100.0" />
+            <Slider fx:id="hGreenS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="255.0" />
+            <Slider fx:id="hGreenV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="255.0" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" prefWidth="20.0" />
+            <Slider fx:id="hRedH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="180.0" />
+            <Slider fx:id="hRedS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="255.0" />
+            <Slider fx:id="hRedV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="255.0" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" prefWidth="20.0" />
+            <Slider fx:id="hBlueH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="120.0" />
+            <Slider fx:id="hBlueS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="255.0" />
+            <Slider fx:id="hBlueV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="255.0" />
          </children></HBox>
-      <Label layoutX="18.0" layoutY="878.0" text="H  S  V" />
-      <Label layoutX="131.0" layoutY="878.0" text="H  S  V" />
-      <Label layoutX="75.0" layoutY="878.0" text="H  S  V" />
-      <Label layoutX="21.0" layoutY="763.0" text="Green" />
-      <Label layoutX="87.0" layoutY="762.0" text="Red" />
-      <Label layoutX="139.0" layoutY="762.0" text="Blue" />
-      <HBox layoutX="212.0" layoutY="778.0" prefHeight="100.0" prefWidth="200.0">
+      <Label layoutX="51.0" layoutY="874.0" text="H  S  V" />
+      <Label layoutX="313.0" layoutY="874.0" text="H  S  V" />
+      <Label layoutX="180.0" layoutY="874.0" text="H  S  V" />
+      <Label layoutX="54.0" layoutY="757.0" text="Green" />
+      <Label layoutX="188.0" layoutY="757.0" text="Red" />
+      <Label layoutX="327.0" layoutY="757.0" text="Blue" />
+      <HBox alignment="CENTER" layoutX="410.0" layoutY="779.0" prefHeight="100.0" prefWidth="350.0">
          <children>
-            <Slider fx:id="lGreenH" blockIncrement="1.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" value="120.0" />
-            <Slider fx:id="lGreenS" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider fx:id="lGreenV" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <Slider fx:id="lRedH" blockIncrement="1.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider fx:id="lRedS" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider fx:id="lRedV" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <Slider fx:id="lBlueH" max="180.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider fx:id="lBlueS" blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
-            <Slider fx:id="lBlueV" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider fx:id="lGreenH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="42.0" />
+            <Slider fx:id="lGreenS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="116.0" />
+            <Slider fx:id="lGreenV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="116.0" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" prefWidth="20.0" />
+            <Slider fx:id="lRedH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="150.0" />
+            <Slider fx:id="lRedS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="80.0" />
+            <Slider fx:id="lRedV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="70.0" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" prefWidth="20.0" />
+            <Slider fx:id="lBlueH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="110.0" />
+            <Slider fx:id="lBlueS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="90.0" />
+            <Slider fx:id="lBlueV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="81.0" />
          </children>
       </HBox>
-      <Label layoutX="336.0" layoutY="762.0" text="Blue" />
-      <Label layoutX="218.0" layoutY="763.0" text="Green" />
-      <Label layoutX="215.0" layoutY="878.0" text="H  S  V" />
-      <Label layoutX="272.0" layoutY="878.0" text="H  S  V" />
-      <Label layoutX="284.0" layoutY="762.0" text="Red" />
-      <Label layoutX="328.0" layoutY="878.0" text="H  S  V" />
-      <Button layoutX="519.0" layoutY="781.0" mnemonicParsing="false" onAction="#takeAFuckingFrame" prefHeight="107.0" prefWidth="107.0" text="PIZGNIJ KLATKĘ" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" wrapText="true">
+      <Label layoutX="687.0" layoutY="757.0" text="Blue" />
+      <Label layoutX="435.0" layoutY="757.0" text="Green" />
+      <Label layoutX="433.0" layoutY="874.0" text="H  S  V" />
+      <Label layoutX="553.0" layoutY="874.0" text="H  S  V" />
+      <Label layoutX="561.0" layoutY="757.0" text="Red" />
+      <Label layoutX="680.0" layoutY="874.0" text="H  S  V" />
+      <Button layoutX="1047.0" layoutY="775.0" mnemonicParsing="false" onAction="#takeAFuckingFrame" prefHeight="107.0" prefWidth="107.0" text="PIZGNIJ KLATKĘ" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS" wrapText="true">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Button>
+      <HBox layoutX="790.0" layoutY="779.0" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Slider fx:id="param1" orientation="VERTICAL" showTickLabels="true" />
+            <Slider fx:id="param2" blockIncrement="1.0" orientation="VERTICAL" showTickLabels="true" />
+            <Slider fx:id="param3" blockIncrement="1.0" orientation="VERTICAL" showTickLabels="true" />
+            <Slider fx:id="param4" blockIncrement="1.0" max="200.0" orientation="VERTICAL" showTickLabels="true" value="200.0" />
+            <Slider fx:id="alpha" blockIncrement="0.1" majorTickUnit="300.0" max="4.0" min="-1.0" orientation="VERTICAL" showTickLabels="true" value="3.0" />
+            <Slider fx:id="beta" max="200.0" min="-200.0" orientation="VERTICAL" showTickLabels="true" value="-100.0" />
+         </children>
+      </HBox>
     </children>
 </AnchorPane>

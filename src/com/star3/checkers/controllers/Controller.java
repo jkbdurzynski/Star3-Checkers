@@ -5,6 +5,7 @@ import com.star3.checkers.models.Edge;
 import com.star3.checkers.models.Pawn;
 import com.star3.checkers.services.ColorCalibration;
 import com.star3.checkers.services.CountdownTimer;
+import com.star3.checkers.services.FrameProcessing;
 import com.star3.checkers.services.MoveValidator;
 import com.star3.checkers.utils.MatrixToBufferedImageConverter;
 import javafx.application.Platform;
@@ -132,8 +133,15 @@ public class Controller {
     @FXML
     private Slider param4 = new Slider();
 
+    //CONTRAST BRIGHTNESS
 
-    VideoCapture capture = new VideoCapture("http://192.168.1.6:8080/videofeed?dummyparam=dummy.mjpg");
+    @FXML
+    private Slider alpha = new Slider();
+
+    @FXML
+    private Slider beta = new Slider();
+
+    VideoCapture capture;
 
     BlockingQueue<GridPane> pawns = new ArrayBlockingQueue<>(10);
 
@@ -185,15 +193,16 @@ public class Controller {
 
     @FXML
     private void initialize() {
-        Thread readImage = new Thread(() -> {
-            while (true) {
-                Mat frame = getFrame(); //queueOfPawns();
-                setMainFrame(frame);
-            }
-
-        });
-        readImage.setDaemon(true);
-        readImage.start();
+//       capture = new VideoCapture("http://192.168.43.1:8080/videofeed?dummyparam=dummy.mjpg");
+//        Thread readImage = new Thread(() -> {
+//            while (true) {
+//                Mat frame = getFrame(); //queueOfPawns();
+//                setMainFrame(frame);
+//            }
+//
+//        });
+//        readImage.setDaemon(true);
+//        readImage.start();
 
         ScheduledService<Void> service = new ScheduledService<Void>() {
             @Override
@@ -687,18 +696,40 @@ public class Controller {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
+    FrameProcessing fp = new FrameProcessing();
+
     @FXML
     private void takeAFuckingFrame() {
-        Mat frame = getMainFrame();
+
+        setColorRanges();
+
+        Mat frame = Imgcodecs.imread("contrastFrame.jpg");
+
+        Mat greenThr = fp.getThresholdMat(frame, greenHigh, greenLow);
+        displayFrame(greenThr, greenThreshold);
+
+        Mat blueThr = fp.getThresholdMat(frame, blueHigh, blueLow);
+        displayFrame(blueThr, blueThreshold);
+
+        Mat redThr = fp.getThresholdMat(frame, redHigh, redLow);
+        displayFrame(redThr, redThreshold);
+
         displayFrame(frame, cameraViewWithCircles);
-        saveFrameToFile(frame, "testFrame");
+
+
+//        Mat frame = getMainFrame();
+//
+//        Mat contrastFrame = new Mat(frame.rows(), frame.cols(), frame.type());
+//
+//        frame.convertTo(contrastFrame, -1, alpha.getValue(), beta.getValue());
+//
+//        displayFrame(contrastFrame, cameraViewWithCircles);
+//        saveFrameToFile(frame, "testFrame");
+//        saveFrameToFile(contrastFrame, "contrastFrame");
     }
 
     private Mat getFrame() {
-        setColorRanges();
-
         Mat capturedFrame = new Mat();
-        Mat frameMatrix = capturedFrame;
         if (capture.isOpened()) {
             capture.read(capturedFrame);
         }
@@ -725,14 +756,14 @@ public class Controller {
     }
 
     private void setColorRanges() {
-        greenHigh = new Scalar(hGreenH.getValue(), hGreenS.getValue(), hGreenV.getValue());
-        greenLow = new Scalar(lGreenH.getValue(), lGreenS.getValue(), lGreenV.getValue());
+        greenHigh = new Scalar(hGreenH.getValue(), hGreenS.getValue(), hGreenV.getValue()); //100,255,255
+        greenLow = new Scalar(lGreenH.getValue(), lGreenS.getValue(), lGreenV.getValue()); // 42,116,116
 
-        redHigh = new Scalar(hRedH.getValue(), hRedS.getValue(), hRedV.getValue());
-        redLow = new Scalar(lRedH.getValue(), lRedS.getValue(), lRedV.getValue());
+        redHigh = new Scalar(hRedH.getValue(), hRedS.getValue(), hRedV.getValue()); // 180,255,255
+        redLow = new Scalar(lRedH.getValue(), lRedS.getValue(), lRedV.getValue()); // 150,80,70
 
-        blueHigh = new Scalar(hBlueH.getValue(), hBlueS.getValue(), hBlueV.getValue());
-        blueLow = new Scalar(lBlueH.getValue(), lBlueS.getValue(), lBlueV.getValue());
+        blueHigh = new Scalar(hBlueH.getValue(), hBlueS.getValue(), hBlueV.getValue()); // 120,255,255
+        blueLow = new Scalar(lBlueH.getValue(), lBlueS.getValue(), lBlueV.getValue()); // 110,90,81
     }
 
     private ArrayList<Double> getHoughParams() {
