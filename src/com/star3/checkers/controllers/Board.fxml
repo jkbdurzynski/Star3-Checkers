@@ -149,10 +149,10 @@
       </Button>
       <HBox layoutX="789.0" layoutY="654.0" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Slider fx:id="param1" orientation="VERTICAL" showTickLabels="true" />
-            <Slider fx:id="param2" blockIncrement="1.0" orientation="VERTICAL" showTickLabels="true" />
-            <Slider fx:id="param3" blockIncrement="1.0" orientation="VERTICAL" showTickLabels="true" />
-            <Slider fx:id="param4" blockIncrement="1.0" max="200.0" orientation="VERTICAL" showTickLabels="true" value="200.0" />
+            <Slider fx:id="param1" orientation="VERTICAL" showTickLabels="true" value="5.0" />
+            <Slider fx:id="param2" blockIncrement="1.0" orientation="VERTICAL" showTickLabels="true" value="20.0" />
+            <Slider fx:id="param3" blockIncrement="1.0" orientation="VERTICAL" showTickLabels="true" value="15.0" />
+            <Slider fx:id="param4" blockIncrement="1.0" max="200.0" orientation="VERTICAL" showTickLabels="true" value="25.0" />
             <Slider fx:id="alpha" blockIncrement="0.1" majorTickUnit="300.0" max="4.0" min="-1.0" orientation="VERTICAL" showTickLabels="true" value="3.0" />
             <Slider fx:id="beta" max="200.0" min="-200.0" orientation="VERTICAL" showTickLabels="true" value="-100.0" />
          </children>

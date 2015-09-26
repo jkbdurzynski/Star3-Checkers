@@ -705,11 +705,8 @@ public class Controller {
 
         Mat frame = Imgcodecs.imread("contrastFrame.jpg");
 
-        ArrayList<Double> params = new ArrayList<>();
-        params.add(new Double(5));
-        params.add(new Double(20));
-        params.add(new Double(15));
-        params.add(new Double(60));
+        ArrayList<Double> params = getHoughParams();
+
 
         Mat greenThr = fp.getThresholdMat(frame, greenHigh, greenLow);
         displayFrame(greenThr, greenThreshold);
