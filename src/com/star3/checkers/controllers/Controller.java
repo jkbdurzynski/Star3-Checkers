@@ -705,6 +705,12 @@ public class Controller {
 
         Mat frame = Imgcodecs.imread("contrastFrame.jpg");
 
+        ArrayList<Double> params = new ArrayList<>();
+        params.add(new Double(5));
+        params.add(new Double(20));
+        params.add(new Double(15));
+        params.add(new Double(60));
+
         Mat greenThr = fp.getThresholdMat(frame, greenHigh, greenLow);
         displayFrame(greenThr, greenThreshold);
 
@@ -714,6 +720,9 @@ public class Controller {
         Mat redThr = fp.getThresholdMat(frame, redHigh, redLow);
         displayFrame(redThr, redThreshold);
 
+        frame = fp.drawCircles(frame,greenThr,params);
+        frame = fp.drawCircles(frame,blueThr,params);
+        frame = fp.drawCircles(frame,redThr,params);
         displayFrame(frame, cameraViewWithCircles);
 
 

@@ -39,7 +39,7 @@ public class FrameProcessing {
         int par3 = params.get(3).intValue();
 
         if (rawMatrix != null && thresholdMatrix != null) {
-            ip.HoughCircles(rawMatrix, circles, ip.HOUGH_GRADIENT, 2.0, rawMatrix.rows() / 8, par0, par1, par2, par3);
+            ip.HoughCircles(thresholdMatrix, circles, ip.HOUGH_GRADIENT, 2.0, thresholdMatrix.rows() / 8, par0, par1, par2, par3);
             for (int i = 0; i < circles.cols(); i++) {
 
                 double vCircle[] = circles.get(0, i);
@@ -55,6 +55,7 @@ public class FrameProcessing {
         }
         return rawMatrix;
     }
+
 }
 
 
