@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+    <children>
+        <GridPane fx:id="gridPane" layoutX="300.0" layoutY="77.0" maxHeight="640.0" maxWidth="640.0" prefHeight="640.0" prefWidth="640.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="80.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="80.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="80.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="80.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="80.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="80.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="80.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="80.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints fillHeight="false" maxHeight="80.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" maxHeight="80.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" maxHeight="80.0" minHeight="3.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" maxHeight="80.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" maxHeight="80.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" maxHeight="80.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" maxHeight="80.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" maxHeight="80.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+        </GridPane>
+        <Separator layoutX="252.0" layoutY="49.0" orientation="VERTICAL" prefHeight="698.0" prefWidth="10.0" />
+        <Button fx:id="submitPlayer1" layoutX="18.0" layoutY="57.0" mnemonicParsing="false" prefHeight="225.0" prefWidth="225.0" style="-fx-background-color: #00CC00;" text="Rozpocznij grę" textAlignment="CENTER" wrapText="true">
+            <font>
+                <Font size="30.0" />
+            </font>
+        </Button>
+        <Button fx:id="submitPlayer2" layoutX="18.0" layoutY="515.0" mnemonicParsing="false" prefHeight="225.0" prefWidth="225.0" style="-fx-background-color: #00CC00;" text="Rozpocznij grę" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+            <font>
+                <Font size="30.0" />
+            </font>
+        </Button>
+        <Separator layoutX="11.0" layoutY="397.0" prefHeight="8.0" prefWidth="238.0" />
+        <Label layoutX="18.0" layoutY="294.0" text="Gracz 1">
+            <font>
+                <Font size="30.0" />
+            </font>
+        </Label>
+        <Label layoutX="18.0" layoutY="469.0" text="Gracz 2">
+            <font>
+                <Font size="30.0" />
+            </font>
+        </Label>
+        <Label fx:id="timPlayer1" layoutX="49.0" layoutY="343.0" text="00:00:000">
+            <font>
+                <Font size="36.0" />
+            </font>
+        </Label>
+        <Label fx:id="timPlayer2" layoutX="49.0" layoutY="410.0" text="00:00:000">
+            <font>
+                <Font size="36.0" />
+            </font>
+        </Label>
+        <MenuBar prefHeight="29.0" prefWidth="1200.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="Gra">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Rozpocznij nową grę" />
+                        <MenuItem mnemonicParsing="false" text="Zatrzymaj grę" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Ustawienia">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Kalibruj kamerę" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+      <ImageView fx:id="cameraView1" fitHeight="173.0" fitWidth="215.0" layoutX="1018.0" layoutY="204.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../1.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cameraView11" fitHeight="173.0" fitWidth="215.0" layoutX="1018.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../1.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cameraView12" fitHeight="173.0" fitWidth="215.0" layoutX="1018.0" layoutY="380.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../1.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="cameraView121" fitHeight="173.0" fitWidth="215.0" layoutX="1018.0" layoutY="554.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../1.png" />
+         </image>
+      </ImageView>
+      <Separator layoutX="1.0" layoutY="757.0" prefHeight="8.0" prefWidth="1187.0" />
+      <HBox layoutX="16.0" layoutY="778.0" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Slider blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" value="120.0" />
+            <Slider blockIncrement="1.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider blockIncrement="1.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <Slider blockIncrement="1.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider blockIncrement="1.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider blockIncrement="1.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <Slider max="255.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider blockIncrement="1.0" orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+            <Slider orientation="VERTICAL" prefHeight="97.0" prefWidth="10.0" />
+         </children></HBox>
+      <Label layoutX="18.0" layoutY="878.0" text="H  S  V" />
+      <Label layoutX="131.0" layoutY="878.0" text="H  S  V" />
+      <Label layoutX="75.0" layoutY="878.0" text="H  S  V" />
+      <Label layoutX="21.0" layoutY="763.0" text="Green" />
+      <Label layoutX="87.0" layoutY="762.0" text="Red" />
+      <Label layoutX="139.0" layoutY="762.0" text="Blue" />
+    </children>
+</AnchorPane>
