@@ -459,36 +459,9 @@ public class Controller {
 
     @FXML
     private void turnPlayer1() {
-      /*  if (gameState == GameState.PLAYER1_TURN) {
-            gameState = GameState.PROCESSING;
-            Mat hsvFrame = getFrame();
-            while (Edge.getDetected() < 4) {
-                edges = getCircles(hsvFrame, Color.GREEN);
-                hsvFrame = getFrame();
-            }
-            Collection<Pawn> red = getCircles(hsvFrame, Color.RED);
-            Collection<Pawn> blue = getCircles(hsvFrame, Color.BLUE);
-            Pawn[][] newBoard = getBoard(hsvFrame, red, blue, edges);
-            GridPane elo = getGrid(red, blue, edges);
-            try {
-                pawns.put(elo);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            moveValidator.initialize(oldBoard, newBoard, PLAYER1);
-            Boolean approval = moveValidator.validate();
-
-            if (approval) {
-                gameState = GameState.PLAYER2_TURN;
-            } else {
-                gameState = GameState.PLAYER1_TURN;
-            }
-        } else if (gameState == GameState.READY_TO_START) {
-            submitPlayer1.setText("Zatwierdź ruch");
-            submitPlayer2.setText("Zatwierdź ruch");
-
-            gameState = GameState.PLAYER1_TURN;
-        }*/
+       if (gameState == GameState.PLAYER1_TURN) {
+           takeAFuckingFrame();
+        }
     }
 
     @FXML
@@ -741,6 +714,28 @@ public class Controller {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        Color current = null;
+        Pawn[][] newBoard = fp.translateCollectionToBoardMatrix(redPawns, bluePawns, greenPawns);
+        if(gameState.equals(GameState.PLAYER1_TURN)){
+            current = Color.BLUE;
+        } else if(gameState.equals(GameState.PLAYER2_TURN)) {
+            current = Color.RED;
+        }
+       if(current != null){
+
+           moveValidator.initialize(oldBoard, newBoard, current);
+
+           boolean validationResult = moveValidator.validate();
+           if (validationResult) {
+               oldBoard = newBoard;
+               gameState = gameState.equals(GameState.PLAYER1_TURN) ? GameState.PLAYER2_TURN : GameState.PLAYER1_TURN;
+               System.out.println("VALIDATION: TRUE");
+           } else {
+               System.out.println("VALIDATION: FALSE");
+           }
+       }
+
+
 
 
 //        Mat frame = getMainFrame();
@@ -762,29 +757,17 @@ public class Controller {
             currentPlayer = Color.RED;
         }
 
-        Pawn[][] oldBoard = {
-                {new Pawn(0, 0, PLAYER1), null, new Pawn(2, 0, PLAYER1), null, new Pawn(4, 0, PLAYER1), null, new Pawn(6, 0, PLAYER1), null},
-                {null, new Pawn(1, 1, PLAYER1), null, new Pawn(3, 1, PLAYER1), null, new Pawn(5, 1, PLAYER1), null, new Pawn(7, 1, PLAYER1)},
-                {new Pawn(0, 2, PLAYER1), null, null, null, null, null, new Pawn(6, 2, PLAYER1), null},
-                {null, null, null, new Pawn(3, 3, PLAYER1), null, new Pawn(5, 3, PLAYER1), null, null},
-                {null, null, new Pawn(2, 4, PLAYER2), null, null, null, null, null},
-                {null, null, null, new Pawn(3, 5, PLAYER2), null, new Pawn(5, 5, PLAYER2), null, new Pawn(7, 5, PLAYER2)},
-                {new Pawn(0, 6, PLAYER2), null, new Pawn(2, 6, PLAYER2), null, new Pawn(4, 6, PLAYER2), null, new Pawn(6, 6, PLAYER2), null},
-                {null, new Pawn(1, 7, PLAYER2), null, new Pawn(3, 7, PLAYER2), null, new Pawn(5, 7, PLAYER2), null, new Pawn(7, 7, PLAYER2)}
-        };
+        Pawn[][] oldBoard = new Pawn[8][8];
+                oldBoard[0][0] = new Pawn(0, 0, PLAYER1);
+                oldBoard[1][1] = new Pawn(1,1, PLAYER2);
 
-        Pawn[][] newBoard = {
-                {new Pawn(0, 0, PLAYER1), null, new Pawn(2, 0, PLAYER1), null, new Pawn(4, 0, PLAYER1), null, new Pawn(6, 0, PLAYER1), null},
-                {null, new Pawn(1, 1, PLAYER1), null, new Pawn(3, 1, PLAYER1), null, new Pawn(5, 1, PLAYER1), null, new Pawn(7, 1, PLAYER1)},
-                {new Pawn(0, 2, PLAYER1), null, null, null, null, null, new Pawn(6, 2, PLAYER1), null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, new Pawn(6, 4, PLAYER2)},
-                {null, null, null, new Pawn(3, 5, PLAYER2), null, new Pawn(5, 5, PLAYER2), null, new Pawn(7, 5, PLAYER2)},
-                {new Pawn(0, 6, PLAYER2), null, new Pawn(2, 6, PLAYER2), null, new Pawn(4, 6, PLAYER2), null, new Pawn(6, 6, PLAYER2), null},
-                {null, new Pawn(1, 7, PLAYER2), null, new Pawn(3, 7, PLAYER2), null, new Pawn(5, 7, PLAYER2), null, new Pawn(7, 7, PLAYER2)}
-        };
+
+        Pawn[][] newBoard = new Pawn[8][8];
+        newBoard[2][2] = new Pawn(2,2,PLAYER1);
+
+
         //newBoard = fp.translateCollectionToBoardMatrix(redPawns, bluePawns, greenPawns);
-        moveValidator.initialize(oldBoard, newBoard, Color.RED);
+        moveValidator.initialize(oldBoard, newBoard, Color.BLUE);
 
         boolean validationResult = moveValidator.validate();
         if (validationResult) {
