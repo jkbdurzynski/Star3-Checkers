@@ -193,16 +193,16 @@ public class Controller {
 
     @FXML
     private void initialize() {
-//       capture = new VideoCapture("http://192.168.43.1:8080/videofeed?dummyparam=dummy.mjpg");
-//        Thread readImage = new Thread(() -> {
-//            while (true) {
-//                Mat frame = getFrame(); //queueOfPawns();
-//                setMainFrame(frame);
-//            }
-//
-//        });
-//        readImage.setDaemon(true);
-//        readImage.start();
+      // capture = new VideoCapture("http://192.168.43.1:8080/videofeed?dummyparam=dummy.mjpg");
+        Thread readImage = new Thread(() -> {
+            while (true) {
+                Mat frame = getFrame(); //queueOfPawns();
+                setMainFrame(frame);
+            }
+
+        });
+        readImage.setDaemon(true);
+        readImage.start();
 
         ScheduledService<Void> service = new ScheduledService<Void>() {
             @Override
@@ -266,42 +266,21 @@ public class Controller {
 
     ArrayList<Pawn> edges = new ArrayList<Pawn>();
 
-    public ArrayList<Pawn> getCircles(Mat hsvMat, Color color) {
+    public ArrayList<Pawn> getCircles(Mat thrMat, Color color, ArrayList<Double> params) {
 
-        Scalar low = greenLow, high = greenHigh;
         ArrayList<Pawn> pawns = new ArrayList<Pawn>();
-        Mat colorMat = new Mat();
-        Mat circle = new Mat();
+        Mat circles = new Mat();
+        double par0 = params.get(0).doubleValue();
+        double par1 = params.get(1).doubleValue();
+        int par2 = params.get(2).intValue();
+        int par3 = params.get(3).intValue();
 
-        switch (color) {
-            case GREEN:
-                low = greenLow;
-                high = greenHigh;
-                break;
-            case RED:
-                low = redLow;
-                high = redHigh;
-                break;
-            case BLUE:
-                low = blueLow;
-                high = blueHigh;
-                break;
-        }
-        Core.inRange(hsvMat, low, high, colorMat);
 
-        int blur = 5;
+        ip.HoughCircles(thrMat, circles, ip.HOUGH_GRADIENT, 2.0, thrMat.rows() / 8, par0,par1,par2,par3);
 
-        int par1 = 5;
-        int par2 = 20;
-        int par3 = 15;
-        int par4 = 60;
+        for (int i = 0; i < circles.cols(); i++) {
 
-        ip.GaussianBlur(colorMat, colorMat, new Size(blur, blur), blur, blur);
-        ip.HoughCircles(colorMat, circle, ip.HOUGH_GRADIENT, 2.0, colorMat.rows() / 8, par1, par2, par3, par4);
-
-        for (int i = 0; i < circle.cols(); i++) {
-
-            double vCircle[] = circle.get(0, i);
+            double vCircle[] = circles.get(0, i);
             double x = vCircle[0];
             int x0 = (int) Math.round(x);
             double y = vCircle[1];
@@ -461,7 +440,7 @@ public class Controller {
 
     @FXML
     private void turnPlayer1() {
-        if (gameState == GameState.PLAYER1_TURN) {
+      /*  if (gameState == GameState.PLAYER1_TURN) {
             gameState = GameState.PROCESSING;
             Mat hsvFrame = getFrame();
             while (Edge.getDetected() < 4) {
@@ -490,12 +469,12 @@ public class Controller {
             submitPlayer2.setText("Zatwierdź ruch");
 
             gameState = GameState.PLAYER1_TURN;
-        }
+        }*/
     }
 
     @FXML
     private void turnPlayer2() {
-        if (gameState == GameState.PLAYER2_TURN) {
+        /*if (gameState == GameState.PLAYER2_TURN) {
             gameState = GameState.PROCESSING;
             Mat hsvFrame = getFrame();
             while (Edge.getDetected() < 4) {
@@ -524,7 +503,7 @@ public class Controller {
             submitPlayer2.setText("Zatwierdź ruch");
 
             gameState = GameState.PLAYER2_TURN;
-        }
+        }*/
     }
 
 
@@ -721,6 +700,15 @@ public class Controller {
         frame = fp.drawCircles(frame,blueThr,params);
         frame = fp.drawCircles(frame,redThr,params);
         displayFrame(frame, cameraViewWithCircles);
+        ArrayList<Pawn> greenPawns = getCircles(greenThr,Color.GREEN,params);
+        Collection<Pawn> redPawns = getCircles(redThr,Color.RED,params);
+        Collection<Pawn> bluePawns = getCircles(blueThr,Color.BLUE,params);
+        GridPane elo = getGrid(redPawns, bluePawns, greenPawns);
+        try {
+            pawns.put(elo);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
 //        Mat frame = getMainFrame();
@@ -736,9 +724,12 @@ public class Controller {
 
     private Mat getFrame() {
         Mat capturedFrame = new Mat();
-        if (capture.isOpened()) {
-            capture.read(capturedFrame);
-        }
+        Mat obrazek = Imgcodecs.imread("contrastFrame.jpg");
+        capturedFrame = obrazek;
+//        if (capture.isOpened()) {
+//            //capture.read(capturedFrame);
+//
+//        }
 
         return capturedFrame;
     }
