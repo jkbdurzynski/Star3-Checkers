@@ -157,6 +157,6 @@
             <Slider fx:id="beta" max="200.0" min="-200.0" orientation="VERTICAL" showTickLabels="true" value="-120.0" />
          </children>
       </HBox>
-      <Button layoutX="1043.0" layoutY="765.0" mnemonicParsing="false" onAction="#validateMove" text="Waliduj" />
+      <Button layoutX="1041.0" layoutY="625.0" mnemonicParsing="false" onAction="#validateMove" text="Waliduj" />
     </children>
 </AnchorPane>
