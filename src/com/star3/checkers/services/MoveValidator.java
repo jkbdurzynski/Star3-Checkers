@@ -35,7 +35,7 @@ public class MoveValidator {
     private Color currentPlayer;
 
     public MoveValidator() {
-        System.out.println("( ?� ?? ?�)");
+
     }
 
     public MoveValidator(Pawn oldBoard[][], Pawn newBoard[][], Color currentPlayer) {
@@ -106,8 +106,8 @@ public class MoveValidator {
         oldMovedPawn = tmpOld;
         newMovedPawn = tmpNew;
 
-        if(oldMovedPawn != null && newMovedPawn != null)
-        return true;
+        if (oldMovedPawn != null && newMovedPawn != null)
+            return true;
         else
             return false;
     }
@@ -118,14 +118,15 @@ public class MoveValidator {
         boolean closestDiagonal = false;
         boolean fraggedEnemyDiagonal = false;
         boolean berserkDiagonal = false;
-        if(numbers){
-          closestDiagonal = checkDiagonalMove(oldMovedPawn.getX(), oldMovedPawn.getY(), newMovedPawn.getX(), newMovedPawn.getY(), 1);
+        boolean multipleJumps = false;
+        if (numbers) {
+            closestDiagonal = checkDiagonalMove(oldMovedPawn.getX(), oldMovedPawn.getY(), newMovedPawn.getX(), newMovedPawn.getY(), 1);
             fraggedEnemyDiagonal = checkDiagonalMove(oldMovedPawn.getX(), oldMovedPawn.getY(), newMovedPawn.getX(), newMovedPawn.getY(), 2);
-             berserkDiagonal = checkBerserkModeMove(oldMovedPawn.getX(), oldMovedPawn.getY(), newMovedPawn.getX(), newMovedPawn.getY(), currentPlayer);
-
+            berserkDiagonal = checkBerserkModeMove(oldMovedPawn.getX(), oldMovedPawn.getY(), newMovedPawn.getX(), newMovedPawn.getY(), currentPlayer);
+            multipleJumps = multipleJumps(oldMovedPawn.getX(), oldMovedPawn.getY(), newMovedPawn.getX(), newMovedPawn.getY(), null);
         }
 
-        if (closestDiagonal || fraggedEnemyDiagonal || berserkDiagonal) {
+        if (closestDiagonal || fraggedEnemyDiagonal || berserkDiagonal || multipleJumps) {
 
             return true;
         } else
@@ -134,7 +135,7 @@ public class MoveValidator {
 
     public boolean validate() {
         boolean properPlayerMove = properCurrentPlayerMove();
-        if(properPlayerMove){
+        if (properPlayerMove) {
             for (int j = 0; j < BOARD_SIDE_LENGTH; j++) {
                 for (int i = 0; i < BOARD_SIDE_LENGTH; i++) {
                     if (diffBoard[j][i] == ENEMY_COLOR_DEFICIENCY) {
@@ -193,7 +194,7 @@ public class MoveValidator {
     private boolean isOnDiagonal(int xRef, int yRef, int xEnemy, int yEnemy) {
         int xDirection = 1;
         int yDirection = 1;
-        int distance = distanceCalc(xRef, xEnemy) - 1;
+        int distance = distanceCalc(xRef, xEnemy);
         if (xRef > 0 && yRef > 0 && xEnemy > 0 && yEnemy > 0) {
 
             if (xEnemy < xRef) {
@@ -212,11 +213,65 @@ public class MoveValidator {
 
     private boolean checkEnemyPawnsDeficiency(int xRef, int yRef, int xEnemy, int yEnemy) {
 
-        int distance = distanceCalc(xRef, xEnemy) - 1;
+        int distance = distanceCalc(xRef, xEnemy);
         if (distance > 0 && isOnDiagonal(xRef, yRef, xEnemy, yEnemy) && diffBoard[xEnemy][yEnemy] == ENEMY_COLOR_DEFICIENCY) {
             return true;
         }
         return false;
+    }
+
+    private boolean multipleJumps(int xRef, int yRef, int destX, int destY, JumpDirection jmpDir) {
+        boolean result = false;
+
+        JumpDirection direction = getJumpDirection(xRef, yRef, jmpDir);
+        if (direction != null) {
+            switch (direction) {
+                case UP_RIGHT:
+                    xRef-=2;
+                    yRef+=2;
+                    break;
+                case UP_LEFT:
+                    xRef-=2;
+                    yRef-=2;
+                    break;
+                case DOWN_RIGHT:
+                    xRef+=2;
+                    yRef+=2;
+                    break;
+                case DOWN_LEFT:
+                    xRef+=2;
+                    yRef-=2;
+                    break;
+            }
+
+            if(xRef == destX && yRef == destY) {
+                result = true;
+            } else {
+                result = multipleJumps(xRef, yRef, destX, destY, direction);
+            }
+        }
+
+        return result;
+
+    }
+
+    private JumpDirection getJumpDirection(int xRef, int yRef, JumpDirection lastJump) {
+        JumpDirection result = null;
+        if (!JumpDirection.UP_LEFT.equals(lastJump) && checkEnemyPawnsDeficiency(xRef, yRef, xRef + 1, yRef + 1)) {
+            result = JumpDirection.DOWN_RIGHT;
+        } else if (!JumpDirection.DOWN_RIGHT.equals(lastJump) && checkEnemyPawnsDeficiency(xRef, yRef, xRef - 1, yRef - 1)) {
+            result = JumpDirection.UP_LEFT;
+        } else if (!JumpDirection.UP_RIGHT.equals(lastJump) && checkEnemyPawnsDeficiency(xRef, yRef, xRef + 1, yRef - 1)) {
+            result = JumpDirection.DOWN_LEFT;
+        } else if (!JumpDirection.DOWN_LEFT.equals(lastJump) && checkEnemyPawnsDeficiency(xRef, yRef, xRef - 1, yRef + 1)) {
+            result = JumpDirection.UP_RIGHT;
+        }
+
+        return result;
+    }
+
+    enum JumpDirection {
+        UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT;
     }
 
 }

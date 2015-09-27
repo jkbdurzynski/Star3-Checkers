@@ -20,13 +20,13 @@ import javafx.util.Duration;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.photo.Photo;
 import org.opencv.videoio.VideoCapture;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -148,7 +148,6 @@ public class Controller {
     Imgproc ip = new Imgproc();
 
     MatrixToBufferedImageConverter mbic = new MatrixToBufferedImageConverter();
-    Pawn[][] oldBoard = new Pawn[8][8];
     MoveValidator moveValidator = new MoveValidator();
 
     static {
@@ -184,6 +183,18 @@ public class Controller {
     private static final Color PLAYER1 = Color.BLUE;
     private static final Color PLAYER2 = Color.RED;
 
+    private Pawn[][] oldBoard = {
+            {new Pawn(0, 0, PLAYER1), null, new Pawn(2, 0, PLAYER1), null, new Pawn(4, 0, PLAYER1), null, new Pawn(6, 0, PLAYER1), null},
+            {null, new Pawn(1, 1, PLAYER1), null, new Pawn(3, 1, PLAYER1), null, new Pawn(5, 1, PLAYER1), null, new Pawn(7, 1, PLAYER1)},
+            {new Pawn(0, 2, PLAYER1), null, new Pawn(2, 2, PLAYER1), null, new Pawn(4, 2, PLAYER1), null, new Pawn(6, 2, PLAYER1), null},
+            {null, null, null, null, null, null, null, null},
+            {null, null, null, null, null, null, null, null},
+            {new Pawn(0, 4, PLAYER2), null, new Pawn(2, 4, PLAYER2), null, new Pawn(4, 4, PLAYER2), null, new Pawn(6, 4, PLAYER2), null},
+            {null, new Pawn(1, 5, PLAYER2), null, new Pawn(3, 5, PLAYER2), null, new Pawn(5, 5, PLAYER2), null, new Pawn(7, 5, PLAYER2)},
+            {new Pawn(0, 6, PLAYER2), null, new Pawn(2, 6, PLAYER2), null, new Pawn(4, 6, PLAYER2), null, new Pawn(6, 6, PLAYER2), null},
+            {null, new Pawn(1, 7, PLAYER2), null, new Pawn(3, 7, PLAYER2), null, new Pawn(5, 7, PLAYER2), null, new Pawn(7, 7, PLAYER2)}
+    };
+
 
     public enum GameState {
         PLAYER1_TURN, PLAYER2_TURN, PROCESSING, PLAYER1_WON, PLAYER2_WON, READY_TO_START, CALIBRATION_REQUIRED, GAME_STOPPED;
@@ -193,7 +204,7 @@ public class Controller {
 
     @FXML
     private void initialize() {
-      // capture = new VideoCapture("http://192.168.43.1:8080/videofeed?dummyparam=dummy.mjpg");
+        capture = new VideoCapture("http://192.168.43.1:8080/videofeed?dummyparam=dummy.mjpg");
         Thread readImage = new Thread(() -> {
             while (true) {
                 Mat frame = getFrame(); //queueOfPawns();
@@ -276,7 +287,7 @@ public class Controller {
         int par3 = params.get(3).intValue();
 
 
-        ip.HoughCircles(thrMat, circles, ip.HOUGH_GRADIENT, 2.0, thrMat.rows() / 8, par0,par1,par2,par3);
+        ip.HoughCircles(thrMat, circles, ip.HOUGH_GRADIENT, 2.0, thrMat.rows() / 8, par0, par1, par2, par3);
 
         for (int i = 0; i < circles.cols(); i++) {
 
@@ -341,54 +352,62 @@ public class Controller {
                 if (i % 2 == 0 && j % 2 == 0 || i % 2 == 1 && j % 2 == 1) {
                     img = new ImageView("black.jpg");
                 } else {
-                    img = new ImageView("white.png");
+                    img = new ImageView("white.jpg");
                 }
-                img.setFitHeight(80.0);
-                img.setFitWidth(80.0);
+                img.setFitHeight(65.0);
+                img.setFitWidth(65.0);
                 grid.add(img, i, j);
             }
         }
 
-        Pawn last = edges.get(3);
-        Pawn first = edges.get(0);
+        if (edges.size() == 2) {
+            Pawn last = edges.get(1);
+            Pawn first = edges.get(0);
 
-        boardStartOffsetX = first.getX();
-        boardStartOffsetY = first.getY();
-        boardDimensionX = getFieldDimension(first.getX(), last.getX());
-        boardDimensionY = getFieldDimension(first.getY(), last.getY());
-        int fieldX = 0;
-        int fieldY = 0;
+            boardStartOffsetX = first.getX();
+            boardStartOffsetY = first.getY();
+            boardDimensionX = getFieldDimension(first.getX(), last.getX());
+            boardDimensionY = getFieldDimension(first.getY(), last.getY());
+            int fieldX = 0;
+            int fieldY = 0;
 
-        for (Pawn tmpPawn : red) {
-            fieldX = ((Double) Math.ceil(((tmpPawn.getX() - boardStartOffsetX) / boardDimensionX) / 0.125)).intValue() - 1;
-            fieldY = ((Double) Math.ceil(((tmpPawn.getY() - boardStartOffsetY) / boardDimensionY) / 0.125)).intValue() - 1;
+            for (Pawn tmpPawn : blue) {
+                fieldX = ((Double) Math.ceil(((tmpPawn.getX() - boardStartOffsetX) / boardDimensionX) / 0.125)).intValue() - 1;
+                fieldY = ((Double) Math.ceil(((tmpPawn.getY() - boardStartOffsetY) / boardDimensionY) / 0.125)).intValue() - 1;
 
-            if (fieldY % 2 == 0 && fieldX % 2 == 0 || fieldY % 2 == 1 && fieldX % 2 == 1) {
-                img = new ImageView("blackRed.jpg");
-            } else {
-                img = new ImageView("whiteRed.jpg");
+                if ((fieldX <= 7 || fieldX >= 0) && (fieldY <= 7 || fieldY >= 0)) {
+                    if (fieldY % 2 == 0 && fieldX % 2 == 0 || fieldY % 2 == 1 && fieldX % 2 == 1) {
+                        img = new ImageView("blackBlue.jpg");
+                    } else {
+                        img = new ImageView("whiteBlue.jpg");
+                    }
+
+                    img.setFitHeight(65.0);
+                    img.setFitWidth(65.0);
+                    grid.add(img, fieldX, fieldY);
+                }
             }
 
-            img.setFitHeight(80.0);
-            img.setFitWidth(80.0);
-            grid.add(img, fieldX, fieldY);
-        }
+            for (Pawn tmpPawn : red) {
+                fieldX = ((Double) Math.ceil(((tmpPawn.getX() - boardStartOffsetX) / boardDimensionX) / 0.125)).intValue() - 1;
+                fieldY = ((Double) Math.ceil(((tmpPawn.getY() - boardStartOffsetY) / boardDimensionY) / 0.125)).intValue() - 1;
 
-        for (Pawn tmpPawn : blue) {
-            fieldX = ((Double) Math.ceil(((tmpPawn.getX() - boardStartOffsetX) / boardDimensionX) / 0.125)).intValue() - 1;
-            fieldY = ((Double) Math.ceil(((tmpPawn.getY() - boardStartOffsetY) / boardDimensionY) / 0.125)).intValue() - 1;
+                if ((fieldX <= 7 || fieldX >= 0) && (fieldY <= 7 || fieldY >= 0)) {
+                    if (fieldY % 2 == 0 && fieldX % 2 == 0 || fieldY % 2 == 1 && fieldX % 2 == 1) {
+                        img = new ImageView("blackRed.jpg");
+                    } else {
+                        img = new ImageView("whiteRed.jpg");
+                    }
 
-
-            if (fieldY % 2 == 0 && fieldX % 2 == 0 || fieldY % 2 == 1 && fieldX % 2 == 1) {
-                img = new ImageView("blackBlue.jpg");
-            } else {
-                img = new ImageView("whiteBlue.jpg");
+                    img.setFitHeight(65.0);
+                    img.setFitWidth(65.0);
+                    grid.add(img, fieldX, fieldY);
+                }
             }
 
-            img.setFitHeight(80.0);
-            img.setFitWidth(80.0);
-            grid.add(img, fieldX, fieldY);
         }
+
+
         return grid;
 
     }
@@ -674,36 +693,49 @@ public class Controller {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
+    ArrayList<Pawn> greenPawns;
+    Collection<Pawn> redPawns;
+    Collection<Pawn> bluePawns;
     FrameProcessing fp = new FrameProcessing();
+    Color currentPlayer = Color.RED;
 
     @FXML
     private void takeAFuckingFrame() {
 
         setColorRanges();
 
-        Mat frame = Imgcodecs.imread("contrastFrame.jpg");
+        Mat frame = getMainFrame(); //Imgcodecs.imread("contrastFrame.jpg");
+        Mat denoise = new Mat();
+
+        Mat contrastFrame = new Mat(frame.rows(), frame.cols(), frame.type());
+        frame.convertTo(contrastFrame, -1, alpha.getValue(), beta.getValue());
+
+        Photo.fastNlMeansDenoisingColored(contrastFrame, denoise);
+//        saveFrameToFile(denoise, "testFrame");
+//        saveFrameToFile(contrastFrame, "contrastFrame");
+//        Mat contrastFrame = Imgcodecs.imread("contrastFrame.png");
 
         ArrayList<Double> params = getHoughParams();
 
 
-        Mat greenThr = fp.getThresholdMat(frame, greenHigh, greenLow);
+        Mat greenThr = fp.getThresholdMat(denoise, greenHigh, greenLow);
         displayFrame(greenThr, greenThreshold);
 
-        Mat blueThr = fp.getThresholdMat(frame, blueHigh, blueLow);
+        Mat blueThr = fp.getThresholdMat(denoise, blueHigh, blueLow);
         displayFrame(blueThr, blueThreshold);
 
-        Mat redThr = fp.getThresholdMat(frame, redHigh, redLow);
+        Mat redThr = fp.getThresholdMat(denoise, redHigh, redLow);
         displayFrame(redThr, redThreshold);
 
-        frame = fp.drawCircles(frame,greenThr,params);
-        frame = fp.drawCircles(frame,blueThr,params);
-        frame = fp.drawCircles(frame,redThr,params);
-        displayFrame(frame, cameraViewWithCircles);
-        ArrayList<Pawn> greenPawns = getCircles(greenThr,Color.GREEN,params);
-        Collection<Pawn> redPawns = getCircles(redThr,Color.RED,params);
-        Collection<Pawn> bluePawns = getCircles(blueThr,Color.BLUE,params);
+        denoise = fp.drawCircles(denoise, greenThr, params);
+        denoise = fp.drawCircles(denoise, blueThr, params);
+        denoise = fp.drawCircles(denoise, redThr, params);
+        displayFrame(denoise, cameraViewWithCircles);
+        greenPawns = getCircles(greenThr, Color.GREEN, params);
+        redPawns = getCircles(redThr, Color.RED, params);
+        bluePawns = getCircles(blueThr, Color.BLUE, params);
         GridPane elo = getGrid(redPawns, bluePawns, greenPawns);
+
         try {
             pawns.put(elo);
         } catch (InterruptedException e) {
@@ -722,14 +754,54 @@ public class Controller {
 //        saveFrameToFile(contrastFrame, "contrastFrame");
     }
 
+    @FXML
+    private void validateMove() {
+        if (currentPlayer == Color.RED) {
+            currentPlayer = Color.BLUE;
+        } else {
+            currentPlayer = Color.RED;
+        }
+
+        Pawn[][] oldBoard = {
+                {new Pawn(0, 0, PLAYER1), null, new Pawn(2, 0, PLAYER1), null, new Pawn(4, 0, PLAYER1), null, new Pawn(6, 0, PLAYER1), null},
+                {null, new Pawn(1, 1, PLAYER1), null, new Pawn(3, 1, PLAYER1), null, new Pawn(5, 1, PLAYER1), null, new Pawn(7, 1, PLAYER1)},
+                {new Pawn(0, 2, PLAYER1), null, null, null, null, null, new Pawn(6, 2, PLAYER1), null},
+                {null, null, null, new Pawn(3, 3, PLAYER1), null, new Pawn(5, 3, PLAYER1), null, null},
+                {null, null, new Pawn(2, 4, PLAYER2), null, null, null, null, null},
+                {null, null, null, new Pawn(3, 5, PLAYER2), null, new Pawn(5, 5, PLAYER2), null, new Pawn(7, 5, PLAYER2)},
+                {new Pawn(0, 6, PLAYER2), null, new Pawn(2, 6, PLAYER2), null, new Pawn(4, 6, PLAYER2), null, new Pawn(6, 6, PLAYER2), null},
+                {null, new Pawn(1, 7, PLAYER2), null, new Pawn(3, 7, PLAYER2), null, new Pawn(5, 7, PLAYER2), null, new Pawn(7, 7, PLAYER2)}
+        };
+
+        Pawn[][] newBoard = {
+                {new Pawn(0, 0, PLAYER1), null, new Pawn(2, 0, PLAYER1), null, new Pawn(4, 0, PLAYER1), null, new Pawn(6, 0, PLAYER1), null},
+                {null, new Pawn(1, 1, PLAYER1), null, new Pawn(3, 1, PLAYER1), null, new Pawn(5, 1, PLAYER1), null, new Pawn(7, 1, PLAYER1)},
+                {new Pawn(0, 2, PLAYER1), null, null, null, null, null, new Pawn(6, 2, PLAYER1), null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, new Pawn(6, 4, PLAYER2)},
+                {null, null, null, new Pawn(3, 5, PLAYER2), null, new Pawn(5, 5, PLAYER2), null, new Pawn(7, 5, PLAYER2)},
+                {new Pawn(0, 6, PLAYER2), null, new Pawn(2, 6, PLAYER2), null, new Pawn(4, 6, PLAYER2), null, new Pawn(6, 6, PLAYER2), null},
+                {null, new Pawn(1, 7, PLAYER2), null, new Pawn(3, 7, PLAYER2), null, new Pawn(5, 7, PLAYER2), null, new Pawn(7, 7, PLAYER2)}
+        };
+        //newBoard = fp.translateCollectionToBoardMatrix(redPawns, bluePawns, greenPawns);
+        moveValidator.initialize(oldBoard, newBoard, Color.RED);
+
+        boolean validationResult = moveValidator.validate();
+        if (validationResult) {
+            oldBoard = newBoard;
+            System.out.println("VALIDATION: TRUE");
+        } else {
+            System.out.println("VALIDATION: FALSE");
+        }
+    }
+
     private Mat getFrame() {
         Mat capturedFrame = new Mat();
-        Mat obrazek = Imgcodecs.imread("contrastFrame.jpg");
-        capturedFrame = obrazek;
-//        if (capture.isOpened()) {
-//            //capture.read(capturedFrame);
-//
-//        }
+//        Mat obrazek = Imgcodecs.imread("contrastFrame.jpg");
+//        capturedFrame = obrazek;
+        if (capture.isOpened()) {
+            capture.read(capturedFrame);
+        }
 
         return capturedFrame;
     }
@@ -752,15 +824,16 @@ public class Controller {
         }
     }
 
+
     private void setColorRanges() {
-        greenHigh = new Scalar(hGreenH.getValue(), hGreenS.getValue(), hGreenV.getValue()); //100,255,255
-        greenLow = new Scalar(lGreenH.getValue(), lGreenS.getValue(), lGreenV.getValue()); // 42,116,116
+        greenHigh = new Scalar(hGreenH.getValue(), hGreenS.getValue(), hGreenV.getValue()); //55,255,255
+        greenLow = new Scalar(lGreenH.getValue(), lGreenS.getValue(), lGreenV.getValue()); // 42,94,97
 
         redHigh = new Scalar(hRedH.getValue(), hRedS.getValue(), hRedV.getValue()); // 180,255,255
         redLow = new Scalar(lRedH.getValue(), lRedS.getValue(), lRedV.getValue()); // 150,80,70
 
         blueHigh = new Scalar(hBlueH.getValue(), hBlueS.getValue(), hBlueV.getValue()); // 120,255,255
-        blueLow = new Scalar(lBlueH.getValue(), lBlueS.getValue(), lBlueV.getValue()); // 110,90,81
+        blueLow = new Scalar(lBlueH.getValue(), lBlueS.getValue(), lBlueV.getValue()); // 110,90,168
     }
 
     private ArrayList<Double> getHoughParams() {

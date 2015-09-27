@@ -103,8 +103,8 @@
       <Separator layoutX="2.0" layoutY="622.0" prefHeight="16.0" prefWidth="1187.0" />
       <HBox layoutX="15.0" layoutY="653.0" prefHeight="100.0" prefWidth="384.0">
          <children>
-            <Slider fx:id="hGreenH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="100.0" />
-            <Slider fx:id="hGreenS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="255.0" />
+            <Slider fx:id="hGreenH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="73.0" />
+            <Slider fx:id="hGreenS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="206.0" />
             <Slider fx:id="hGreenV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="255.0" />
             <Separator orientation="VERTICAL" prefHeight="200.0" prefWidth="20.0" />
             <Slider fx:id="hRedH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="180.0" />
@@ -124,16 +124,16 @@
       <HBox alignment="CENTER" layoutX="409.0" layoutY="654.0" prefHeight="100.0" prefWidth="350.0">
          <children>
             <Slider fx:id="lGreenH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="42.0" />
-            <Slider fx:id="lGreenS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="116.0" />
-            <Slider fx:id="lGreenV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="116.0" />
+            <Slider fx:id="lGreenS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="127.0" />
+            <Slider fx:id="lGreenV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="130.0" />
             <Separator orientation="VERTICAL" prefHeight="200.0" prefWidth="20.0" />
-            <Slider fx:id="lRedH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="150.0" />
-            <Slider fx:id="lRedS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="80.0" />
-            <Slider fx:id="lRedV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="70.0" />
+            <Slider fx:id="lRedH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="136.0" />
+            <Slider fx:id="lRedS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="84.0" />
+            <Slider fx:id="lRedV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="106.0" />
             <Separator orientation="VERTICAL" prefHeight="200.0" prefWidth="20.0" />
-            <Slider fx:id="lBlueH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="110.0" />
-            <Slider fx:id="lBlueS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="90.0" />
-            <Slider fx:id="lBlueV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="81.0" />
+            <Slider fx:id="lBlueH" blockIncrement="3.0" majorTickUnit="10.0" max="180.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="96.0" />
+            <Slider fx:id="lBlueS" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="114.0" />
+            <Slider fx:id="lBlueV" blockIncrement="3.0" majorTickUnit="10.0" max="255.0" orientation="VERTICAL" prefHeight="97.0" showTickLabels="true" value="136.0" />
          </children>
       </HBox>
       <Label layoutX="686.0" layoutY="632.0" text="Blue" />
@@ -151,11 +151,12 @@
          <children>
             <Slider fx:id="param1" orientation="VERTICAL" showTickLabels="true" value="5.0" />
             <Slider fx:id="param2" blockIncrement="1.0" orientation="VERTICAL" showTickLabels="true" value="20.0" />
-            <Slider fx:id="param3" blockIncrement="1.0" orientation="VERTICAL" showTickLabels="true" value="15.0" />
-            <Slider fx:id="param4" blockIncrement="1.0" max="200.0" orientation="VERTICAL" showTickLabels="true" value="25.0" />
-            <Slider fx:id="alpha" blockIncrement="0.1" majorTickUnit="300.0" max="4.0" min="-1.0" orientation="VERTICAL" showTickLabels="true" value="3.0" />
-            <Slider fx:id="beta" max="200.0" min="-200.0" orientation="VERTICAL" showTickLabels="true" value="-100.0" />
+            <Slider fx:id="param3" blockIncrement="1.0" orientation="VERTICAL" showTickLabels="true" value="12.0" />
+            <Slider fx:id="param4" blockIncrement="1.0" max="200.0" orientation="VERTICAL" showTickLabels="true" value="45.0" />
+            <Slider fx:id="alpha" blockIncrement="0.1" majorTickUnit="300.0" max="4.0" min="-1.0" orientation="VERTICAL" showTickLabels="true" value="2.3" />
+            <Slider fx:id="beta" max="200.0" min="-200.0" orientation="VERTICAL" showTickLabels="true" value="-120.0" />
          </children>
       </HBox>
+      <Button layoutX="1043.0" layoutY="765.0" mnemonicParsing="false" onAction="#validateMove" text="Waliduj" />
     </children>
 </AnchorPane>
