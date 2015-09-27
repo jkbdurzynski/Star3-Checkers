@@ -184,8 +184,8 @@ public class Controller {
     CountdownTimer timerPlayer1;
     CountdownTimer timerPlayer2;
 
-    private static final Color PLAYER1 = Color.BLUE;
-    private static final Color PLAYER2 = Color.RED;
+    private static final Color PLAYER1 = Color.RED;
+    private static final Color PLAYER2 = Color.BLUE;
 
     private Pawn[][] oldBoard = {
             {new Pawn(0, 0, PLAYER1), null, new Pawn(2, 0, PLAYER1), null, new Pawn(4, 0, PLAYER1), null, new Pawn(6, 0, PLAYER1), null},

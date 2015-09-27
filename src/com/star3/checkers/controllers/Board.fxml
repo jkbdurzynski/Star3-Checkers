@@ -34,12 +34,12 @@
             </rowConstraints>
         </GridPane>
         <Separator layoutX="252.0" layoutY="49.0" orientation="VERTICAL" prefHeight="563.0" prefWidth="10.0" />
-        <Button fx:id="submitPlayer1" layoutX="34.0" layoutY="40.0" mnemonicParsing="false" prefHeight="192.0" prefWidth="192.0" style="-fx-background-color: #00CC00;" text="Rozpocznij grę" textAlignment="CENTER" wrapText="true">
+        <Button fx:id="submitPlayer1" layoutX="34.0" layoutY="40.0" mnemonicParsing="false" onAction="#turnPlayer1" prefHeight="192.0" prefWidth="192.0" style="-fx-background-color: #00CC00;" text="Rozpocznij grę" textAlignment="CENTER" wrapText="true">
             <font>
                 <Font size="30.0" />
             </font>
         </Button>
-        <Button fx:id="submitPlayer2" layoutX="34.0" layoutY="416.0" mnemonicParsing="false" prefHeight="194.0" prefWidth="194.0" style="-fx-background-color: #00CC00;" text="Rozpocznij grę" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+        <Button fx:id="submitPlayer2" layoutX="34.0" layoutY="416.0" mnemonicParsing="false" onAction="#turnPlayer2" prefHeight="194.0" prefWidth="194.0" style="-fx-background-color: #00CC00;" text="Rozpocznij grę" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
             <font>
                 <Font size="30.0" />
             </font>
@@ -68,13 +68,13 @@
             <menus>
                 <Menu mnemonicParsing="false" text="Gra">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Rozpocznij nową grę" />
-                        <MenuItem mnemonicParsing="false" text="Zatrzymaj grę" />
+                        <MenuItem mnemonicParsing="false" onAction="#startNewGame" text="Rozpocznij nową grę" />
+                        <MenuItem mnemonicParsing="false" onAction="#stopGame" text="Zatrzymaj grę" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ustawienia">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Kalibruj kamerę" />
+                        <MenuItem mnemonicParsing="false" onAction="#calibartionWizard" text="Kalibruj kamerę" />
                     </items>
                 </Menu>
             </menus>
