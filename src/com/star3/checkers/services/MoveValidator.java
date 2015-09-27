@@ -112,6 +112,17 @@ public class MoveValidator {
             return false;
     }
 
+    private int getEnemyColorDeficiencyNumber(){
+        int countEnemyColorDeficiency = 0;
+        for (int j = 0; j < BOARD_SIDE_LENGTH; j++) {
+            for (int i = 0; i < BOARD_SIDE_LENGTH; i++) {
+                if (diffBoard[j][i] == ENEMY_COLOR_DEFICIENCY) {
+                    countEnemyColorDeficiency++;
+                }
+            }
+        }
+        return countEnemyColorDeficiency;
+    }
 
     private boolean properCurrentPlayerMove() {
         boolean numbers = validatePawnsNumber();
@@ -119,6 +130,10 @@ public class MoveValidator {
         boolean fraggedEnemyDiagonal = false;
         boolean berserkDiagonal = false;
         boolean multipleJumps = false;
+        boolean enemyFraggedPawns = true;
+
+
+
         if (numbers) {
             closestDiagonal = checkDiagonalMove(oldMovedPawn.getX(), oldMovedPawn.getY(), newMovedPawn.getX(), newMovedPawn.getY(), 1);
             fraggedEnemyDiagonal = checkDiagonalMove(oldMovedPawn.getX(), oldMovedPawn.getY(), newMovedPawn.getX(), newMovedPawn.getY(), 2);
@@ -126,28 +141,20 @@ public class MoveValidator {
             multipleJumps = multipleJumps(oldMovedPawn.getX(), oldMovedPawn.getY(), newMovedPawn.getX(), newMovedPawn.getY(), null);
         }
 
-        if (closestDiagonal || fraggedEnemyDiagonal || berserkDiagonal || multipleJumps) {
+        if (closestDiagonal || fraggedEnemyDiagonal || berserkDiagonal|| multipleJumps) {
 
             return true;
-        } else
+        } else{
+
+        }
             return false;
     }
 
+
     public boolean validate() {
         boolean properPlayerMove = properCurrentPlayerMove();
-        if (properPlayerMove) {
-            for (int j = 0; j < BOARD_SIDE_LENGTH; j++) {
-                for (int i = 0; i < BOARD_SIDE_LENGTH; i++) {
-                    if (diffBoard[j][i] == ENEMY_COLOR_DEFICIENCY) {
-                        int dist = distanceCalc(oldMovedPawn.getX(), j);
-                        if (checkDiagonalMove(oldMovedPawn.getX(), oldMovedPawn.getY(), j, i, dist)) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
+
+        return properPlayerMove;
     }
 
 
@@ -195,7 +202,7 @@ public class MoveValidator {
         int xDirection = 1;
         int yDirection = 1;
         int distance = distanceCalc(xRef, xEnemy);
-        if (xRef > 0 && yRef > 0 && xEnemy > 0 && yEnemy > 0) {
+        if (xRef >= 0 && yRef >= 0 && xEnemy >= 0 && yEnemy >= 0) {
 
             if (xEnemy < xRef) {
                 xDirection = -1;
