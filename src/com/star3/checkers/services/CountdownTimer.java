@@ -1,8 +1,5 @@
 package com.star3.checkers.services;
 
-/**
- * Created by jakubdurzynski on 12.09.2015.
- */
 public class CountdownTimer {
 
     private int min;
@@ -32,7 +29,7 @@ public class CountdownTimer {
     }
 
     public boolean timedOut() {
-        return (min == 0 & sec == 0) ? true : false;
+        return (min <= 0 & sec <= 0) ? true : false;
     }
 
     public String toString() {

@@ -15,7 +15,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("Board.fxml"));
+        loader.setLocation(Main.class.getResource("DebugBoard.fxml"));
         rootLayout = (AnchorPane) loader.load();
 
         Group group = new Group();

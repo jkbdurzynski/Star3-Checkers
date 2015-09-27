@@ -148,23 +148,18 @@ public class Controller {
     Imgproc ip = new Imgproc();
 
     MatrixToBufferedImageConverter mbic = new MatrixToBufferedImageConverter();
+
     MoveValidator moveValidator = new MoveValidator();
 
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
-    synchronized public Mat getMainFrame() {
-        return mainFrame;
-    }
-
-    synchronized public void setMainFrame(Mat mainFrame) {
-        this.mainFrame = mainFrame;
-    }
-
     private Mat mainFrame = new Mat();
-
-    Mat hsvMatryx = new Mat();
+    private ArrayList<Pawn> greenPawns;
+    private Collection<Pawn> redPawns;
+    private Collection<Pawn> bluePawns;
+    private FrameProcessing fp = new FrameProcessing();
 
     Scalar redLow = new Scalar(170, 110, 60);
     Scalar redHigh = new Scalar(179, 255, 255);
@@ -174,6 +169,15 @@ public class Controller {
 
     Scalar greenHigh = new Scalar(90, 255, 255);
     Scalar greenLow = new Scalar(40, 100, 40);
+
+    Scalar redLowS = new Scalar(170, 110, 60);
+    Scalar redHighS = new Scalar(179, 255, 255);
+
+    Scalar blueLowS = new Scalar(100, 100, 60);
+    Scalar blueHighS = new Scalar(125, 255, 255);
+
+    Scalar greenHighS = new Scalar(90, 255, 255);
+    Scalar greenLowS = new Scalar(40, 100, 40);
 
     ScheduledService<Void> timerTask;
 
@@ -189,7 +193,6 @@ public class Controller {
             {new Pawn(0, 2, PLAYER1), null, new Pawn(2, 2, PLAYER1), null, new Pawn(4, 2, PLAYER1), null, new Pawn(6, 2, PLAYER1), null},
             {null, null, null, null, null, null, null, null},
             {null, null, null, null, null, null, null, null},
-            {new Pawn(0, 4, PLAYER2), null, new Pawn(2, 4, PLAYER2), null, new Pawn(4, 4, PLAYER2), null, new Pawn(6, 4, PLAYER2), null},
             {null, new Pawn(1, 5, PLAYER2), null, new Pawn(3, 5, PLAYER2), null, new Pawn(5, 5, PLAYER2), null, new Pawn(7, 5, PLAYER2)},
             {new Pawn(0, 6, PLAYER2), null, new Pawn(2, 6, PLAYER2), null, new Pawn(4, 6, PLAYER2), null, new Pawn(6, 6, PLAYER2), null},
             {null, new Pawn(1, 7, PLAYER2), null, new Pawn(3, 7, PLAYER2), null, new Pawn(5, 7, PLAYER2), null, new Pawn(7, 7, PLAYER2)}
@@ -197,7 +200,7 @@ public class Controller {
 
 
     public enum GameState {
-        PLAYER1_TURN, PLAYER2_TURN, PROCESSING, PLAYER1_WON, PLAYER2_WON, READY_TO_START, CALIBRATION_REQUIRED, GAME_STOPPED;
+        PLAYER1_TURN, PLAYER2_TURN, PROCESSING, PLAYER1_WON, PLAYER2_WON, READY_TO_START, CALIBRATION_REQUIRED, GAME_STOPPED
     }
 
     GameState gameState = GameState.CALIBRATION_REQUIRED;
@@ -459,43 +462,26 @@ public class Controller {
 
     @FXML
     private void turnPlayer1() {
-       if (gameState == GameState.PLAYER1_TURN) {
-           takeAFuckingFrame();
+        if (gameState == GameState.PLAYER1_TURN) {
+            takeAFrame();
+        } else if (gameState == GameState.READY_TO_START) {
+            submitPlayer1.setText("Zatwierdź ruch");
+            submitPlayer2.setText("Zatwierdź ruch");
+
+            gameState = GameState.PLAYER1_TURN;
         }
     }
 
     @FXML
     private void turnPlayer2() {
-        /*if (gameState == GameState.PLAYER2_TURN) {
-            gameState = GameState.PROCESSING;
-            Mat hsvFrame = getFrame();
-            while (Edge.getDetected() < 4) {
-                edges = getCircles(hsvFrame, Color.GREEN);
-                hsvFrame = getFrame();
-            }
-            Collection<Pawn> red = getCircles(hsvFrame, Color.RED);
-            Collection<Pawn> blue = getCircles(hsvFrame, Color.BLUE);
-            Pawn[][] newBoard = getBoard(hsvFrame, red, blue, edges);
-            GridPane gridPane = getGrid(red, blue, edges);
-            try {
-                pawns.put(gridPane);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            moveValidator.initialize(oldBoard, newBoard, PLAYER1);
-            Boolean approval = moveValidator.validate();
-
-            if (approval) {
-                gameState = GameState.PLAYER1_TURN;
-            } else {
-                gameState = GameState.PLAYER2_TURN;
-            }
+        if (gameState == GameState.PLAYER2_TURN) {
+            takeAFrame();
         } else if (gameState == GameState.READY_TO_START) {
             submitPlayer1.setText("Zatwierdź ruch");
             submitPlayer2.setText("Zatwierdź ruch");
 
             gameState = GameState.PLAYER2_TURN;
-        }*/
+        }
     }
 
 
@@ -615,8 +601,8 @@ public class Controller {
             Mat frame = Imgcodecs.imread("kalibracjaZielony.png"); // getFrame()
             ArrayList<Double> colors = greenCalibration.getColor(frame, 3, 80);
 
-            greenHigh = new Scalar(colors.get(1), 255, 255);
-            greenLow = new Scalar(colors.get(0), 100, 60);
+            greenHighS = new Scalar(colors.get(1), 255, 255);
+            greenLowS = new Scalar(colors.get(0), 100, 60);
             return true;
         } else {
             return false;
@@ -634,8 +620,8 @@ public class Controller {
             ColorCalibration redCalibration = new ColorCalibration();
             Mat frame = getFrame();
             ArrayList<Double> colors = redCalibration.getColor(frame, 3, 165);
-            redHigh = new Scalar(colors.get(1), 255, 255);
-            redLow = new Scalar(colors.get(0), 100, 60);
+            redHighS = new Scalar(colors.get(1), 255, 255);
+            redLowS = new Scalar(colors.get(0), 100, 60);
             return true;
         } else {
             return false;
@@ -653,8 +639,8 @@ public class Controller {
             ColorCalibration blueCalibration = new ColorCalibration();
             Mat frame = getFrame();
             ArrayList<Double> colors = blueCalibration.getColor(frame, 3, 111);
-            blueHigh = new Scalar(colors.get(1), 255, 255);
-            blueLow = new Scalar(colors.get(0), 100, 60);
+            blueHighS = new Scalar(colors.get(1), 255, 255);
+            blueLowS = new Scalar(colors.get(0), 100, 60);
             return true;
         } else {
             return false;
@@ -666,14 +652,17 @@ public class Controller {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    ArrayList<Pawn> greenPawns;
-    Collection<Pawn> redPawns;
-    Collection<Pawn> bluePawns;
-    FrameProcessing fp = new FrameProcessing();
-    Color currentPlayer = Color.RED;
-
     @FXML
-    private void takeAFuckingFrame() {
+    private void takeAFrame() {
+
+        Color current = null;
+        if (gameState.equals(GameState.PLAYER1_TURN)) {
+            current = Color.BLUE;
+        } else if (gameState.equals(GameState.PLAYER2_TURN)) {
+            current = Color.RED;
+        }
+
+        gameState = GameState.PROCESSING;
 
         setColorRanges();
 
@@ -707,67 +696,51 @@ public class Controller {
         greenPawns = getCircles(greenThr, Color.GREEN, params);
         redPawns = getCircles(redThr, Color.RED, params);
         bluePawns = getCircles(blueThr, Color.BLUE, params);
-        GridPane elo = getGrid(redPawns, bluePawns, greenPawns);
+        GridPane gridPane = getGrid(redPawns, bluePawns, greenPawns);
 
         try {
-            pawns.put(elo);
+            pawns.put(gridPane);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Color current = null;
         Pawn[][] newBoard = fp.translateCollectionToBoardMatrix(redPawns, bluePawns, greenPawns);
-        if(gameState.equals(GameState.PLAYER1_TURN)){
-            current = Color.BLUE;
-        } else if(gameState.equals(GameState.PLAYER2_TURN)) {
-            current = Color.RED;
+
+        if (current != null) {
+
+            moveValidator.initialize(oldBoard, newBoard, current);
+
+            boolean validationResult = moveValidator.validate();
+            if (validationResult) {
+                oldBoard = newBoard;
+                gameState = Color.RED.equals(current) ? GameState.PLAYER2_TURN : GameState.PLAYER1_TURN;
+                System.out.println("VALIDATION: TRUE");
+            } else {
+                System.out.println("VALIDATION: FALSE");
+            }
         }
-       if(current != null){
-
-           moveValidator.initialize(oldBoard, newBoard, current);
-
-           boolean validationResult = moveValidator.validate();
-           if (validationResult) {
-               oldBoard = newBoard;
-               gameState = gameState.equals(GameState.PLAYER1_TURN) ? GameState.PLAYER2_TURN : GameState.PLAYER1_TURN;
-               System.out.println("VALIDATION: TRUE");
-           } else {
-               System.out.println("VALIDATION: FALSE");
-           }
-       }
-
-
-
-
-//        Mat frame = getMainFrame();
-//
-//        Mat contrastFrame = new Mat(frame.rows(), frame.cols(), frame.type());
-//
-//        frame.convertTo(contrastFrame, -1, alpha.getValue(), beta.getValue());
-//
-//        displayFrame(contrastFrame, cameraViewWithCircles);
-//        saveFrameToFile(frame, "testFrame");
-//        saveFrameToFile(contrastFrame, "contrastFrame");
     }
 
     @FXML
     private void validateMove() {
-        if (currentPlayer == Color.RED) {
-            currentPlayer = Color.BLUE;
-        } else {
-            currentPlayer = Color.RED;
+        Color current = null;
+        if (gameState.equals(GameState.PLAYER1_TURN)) {
+            current = Color.BLUE;
+        } else if (gameState.equals(GameState.PLAYER2_TURN)) {
+            current = Color.RED;
         }
 
-        Pawn[][] oldBoard = new Pawn[8][8];
-                oldBoard[0][0] = new Pawn(0, 0, PLAYER1);
-                oldBoard[1][1] = new Pawn(1,1, PLAYER2);
-
-
+//        Pawn[][] oldBoard = new Pawn[8][8];
         Pawn[][] newBoard = new Pawn[8][8];
-        newBoard[2][2] = new Pawn(2,2,PLAYER1);
+//
+//        oldBoard[7][7] = new Pawn(0, 0, Color.RED);
+//        oldBoard[5][5] = new Pawn(1, 1, Color.BLUE);
+//        //oldBoard[5][1] = new Pawn(5,1, Color.BLUE);
+//
+//        newBoard[6][6] = new Pawn(0, 6, Color.RED);
+//        newBoard[5][5] = new Pawn(1, 1, Color.BLUE);
 
-
-        //newBoard = fp.translateCollectionToBoardMatrix(redPawns, bluePawns, greenPawns);
-        moveValidator.initialize(oldBoard, newBoard, Color.BLUE);
+        newBoard = fp.translateCollectionToBoardMatrix(redPawns, bluePawns, greenPawns);
+        moveValidator.initialize(oldBoard, newBoard, current);
 
         boolean validationResult = moveValidator.validate();
         if (validationResult) {
@@ -780,8 +753,6 @@ public class Controller {
 
     private Mat getFrame() {
         Mat capturedFrame = new Mat();
-//        Mat obrazek = Imgcodecs.imread("contrastFrame.jpg");
-//        capturedFrame = obrazek;
         if (capture.isOpened()) {
             capture.read(capturedFrame);
         }
@@ -828,5 +799,13 @@ public class Controller {
         result.add(param4.getValue());
 
         return result;
+    }
+
+    synchronized public Mat getMainFrame() {
+        return mainFrame;
+    }
+
+    synchronized public void setMainFrame(Mat mainFrame) {
+        this.mainFrame = mainFrame;
     }
 }

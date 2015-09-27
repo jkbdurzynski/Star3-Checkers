@@ -9,11 +9,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
-/**
- * Created by cysio on 26.09.2015.
- */
-
-
 public class FrameProcessing {
 
     Imgproc ip;
