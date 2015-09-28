@@ -95,7 +95,7 @@ public class ColorCalibration {
         ip.GaussianBlur(matrix1, matrix2, new Size(BLUR, BLUR), BLUR, BLUR);
 
 
-        while (count != numberOfPawns && lColor != LOWER_LIMIT && hColor != HIGHER_LIMIT) {
+        while (count != numberOfPawns && lColor != Integer.valueOf(LOWER_LIMIT).doubleValue() && hColor != Integer.valueOf(HIGHER_LIMIT).doubleValue()) {
             low = new Scalar(lColor, 70, 60);
             high = new Scalar(hColor, 255, 255);
 

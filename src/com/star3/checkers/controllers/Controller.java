@@ -187,16 +187,9 @@ public class Controller {
     private static final Color PLAYER1 = Color.RED;
     private static final Color PLAYER2 = Color.BLUE;
 
-    private Pawn[][] oldBoard = {
-            {new Pawn(0, 0, PLAYER1), null, new Pawn(2, 0, PLAYER1), null, new Pawn(4, 0, PLAYER1), null, new Pawn(6, 0, PLAYER1), null},
-            {null, new Pawn(1, 1, PLAYER1), null, new Pawn(3, 1, PLAYER1), null, new Pawn(5, 1, PLAYER1), null, new Pawn(7, 1, PLAYER1)},
-            {new Pawn(0, 2, PLAYER1), null, new Pawn(2, 2, PLAYER1), null, new Pawn(4, 2, PLAYER1), null, new Pawn(6, 2, PLAYER1), null},
-            {null, null, null, null, null, null, null, null},
-            {null, null, null, null, null, null, null, null},
-            {null, new Pawn(1, 5, PLAYER2), null, new Pawn(3, 5, PLAYER2), null, new Pawn(5, 5, PLAYER2), null, new Pawn(7, 5, PLAYER2)},
-            {new Pawn(0, 6, PLAYER2), null, new Pawn(2, 6, PLAYER2), null, new Pawn(4, 6, PLAYER2), null, new Pawn(6, 6, PLAYER2), null},
-            {null, new Pawn(1, 7, PLAYER2), null, new Pawn(3, 7, PLAYER2), null, new Pawn(5, 7, PLAYER2), null, new Pawn(7, 7, PLAYER2)}
-    };
+    private Pawn[][] oldBoard = new Pawn[8][8];
+
+    private Pawn[][] newBoard = new Pawn[8][8];
 
 
     public enum GameState {
@@ -290,7 +283,7 @@ public class Controller {
         int par3 = params.get(3).intValue();
 
 
-        ip.HoughCircles(thrMat, circles, ip.HOUGH_GRADIENT, 2.0, thrMat.rows() / 8, par0, par1, par2, par3);
+        ip.HoughCircles(thrMat, circles, ip.HOUGH_GRADIENT, 2.0, par1, par0, par1, par2, par3);
 
         for (int i = 0; i < circles.cols(); i++) {
 
@@ -299,16 +292,17 @@ public class Controller {
             int x0 = (int) Math.round(x);
             double y = vCircle[1];
             int y0 = (int) Math.round(y);
+            Pawn pawn = new Pawn(x0, y0, color);
 
             switch (color) {
                 case GREEN:
                     pawns.add(new Edge(x0, y0, color));
                     break;
                 case RED:
-                    pawns.add(new Pawn(x0, y0, color));
+                    pawns.add(pawn);
                     break;
                 case BLUE:
-                    pawns.add(new Pawn(x0, y0, color));
+                    pawns.add(pawn);
                     break;
             }
         }
@@ -388,6 +382,7 @@ public class Controller {
                     img.setFitHeight(65.0);
                     img.setFitWidth(65.0);
                     grid.add(img, fieldX, fieldY);
+                    newBoard[fieldY][fieldX] = tmpPawn;
                 }
             }
 
@@ -405,6 +400,7 @@ public class Controller {
                     img.setFitHeight(65.0);
                     img.setFitWidth(65.0);
                     grid.add(img, fieldX, fieldY);
+                    newBoard[fieldY][fieldX] = tmpPawn;
                 }
             }
 
@@ -487,6 +483,20 @@ public class Controller {
 
     @FXML
     private void startNewGame() {
+        Pawn[][] board = {
+            {new Pawn(0, 0, PLAYER1), null, new Pawn(2, 0, PLAYER1), null, new Pawn(4, 0, PLAYER1), null, new Pawn(6, 0, PLAYER1), null},
+            {null, new Pawn(1, 1, PLAYER1), null, new Pawn(3, 1, PLAYER1), null, new Pawn(5, 1, PLAYER1), null, new Pawn(7, 1, PLAYER1)},
+            {new Pawn(0, 2, PLAYER1), null, new Pawn(2, 2, PLAYER1), null, new Pawn(4, 2, PLAYER1), null, new Pawn(6, 2, PLAYER1), null},
+            {null, null, null, null, null, null, null, null},
+            {null, null, null, null, null, null, null, null},
+            {null, new Pawn(1, 5, PLAYER2), null, new Pawn(3, 5, PLAYER2), null, new Pawn(5, 5, PLAYER2), null, new Pawn(7, 5, PLAYER2)},
+            {new Pawn(0, 6, PLAYER2), null, new Pawn(2, 6, PLAYER2), null, new Pawn(4, 6, PLAYER2), null, new Pawn(6, 6, PLAYER2), null},
+            {null, new Pawn(1, 7, PLAYER2), null, new Pawn(3, 7, PLAYER2), null, new Pawn(5, 7, PLAYER2), null, new Pawn(7, 7, PLAYER2)}
+        };
+
+        oldBoard = board;
+
+
         GameState stateTmp = gameState;
         gameState = GameState.PROCESSING;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -569,11 +579,13 @@ public class Controller {
     private void calibartionWizard() {
         if (gameState == GameState.CALIBRATION_REQUIRED || gameState == GameState.GAME_STOPPED) {
             try {
-                boolean status = calibrationGreenColor();
+                Mat frame = getMainFrame();
+
+                boolean status = calibrationGreenColor(frame);
                 if (status) {
-                    status = calibrationBlueColor();
+                    status = calibrationBlueColor(frame);
                     if (status) {
-                        status = calibrationRedColor();
+                        status = calibrationRedColor(frame);
                     }
                 }
 
@@ -589,7 +601,7 @@ public class Controller {
         }
     }
 
-    private boolean calibrationGreenColor() throws Exception {
+    private boolean calibrationGreenColor(Mat frame) throws Exception {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Kalibarcja kamery");
         alert.setHeaderText("Przeprowadź kalibrację koloru zielonego");
@@ -598,8 +610,7 @@ public class Controller {
         Optional<ButtonType> alertResult = alert.showAndWait();
         if (alertResult.get() == ButtonType.OK) {
             ColorCalibration greenCalibration = new ColorCalibration();
-            Mat frame = Imgcodecs.imread("kalibracjaZielony.png"); // getFrame()
-            ArrayList<Double> colors = greenCalibration.getColor(frame, 3, 80);
+            ArrayList<Double> colors = greenCalibration.getColor(frame, 2, 80);
 
             greenHighS = new Scalar(colors.get(1), 255, 255);
             greenLowS = new Scalar(colors.get(0), 100, 60);
@@ -609,7 +620,7 @@ public class Controller {
         }
     }
 
-    private boolean calibrationRedColor() throws Exception {
+    private boolean calibrationRedColor(Mat frame) throws Exception {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Kalibarcja kamery");
         alert.setHeaderText("Przeprowadź kalibrację koloru czerwonego");
@@ -618,17 +629,16 @@ public class Controller {
         Optional<ButtonType> alertResult = alert.showAndWait();
         if (alertResult.get() == ButtonType.OK) {
             ColorCalibration redCalibration = new ColorCalibration();
-            Mat frame = getFrame();
-            ArrayList<Double> colors = redCalibration.getColor(frame, 3, 165);
+            ArrayList<Double> colors = redCalibration.getColor(frame, 12, 175);
             redHighS = new Scalar(colors.get(1), 255, 255);
-            redLowS = new Scalar(colors.get(0), 100, 60);
+            redLowS = new Scalar(colors.get(0), 84, 106);
             return true;
         } else {
             return false;
         }
     }
 
-    private boolean calibrationBlueColor() throws Exception {
+    private boolean calibrationBlueColor(Mat frame) throws Exception {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Kalibarcja kamery");
         alert.setHeaderText("Przeprowadź kalibrację koloru niebieskiego");
@@ -637,10 +647,9 @@ public class Controller {
         Optional<ButtonType> alertResult = alert.showAndWait();
         if (alertResult.get() == ButtonType.OK) {
             ColorCalibration blueCalibration = new ColorCalibration();
-            Mat frame = getFrame();
-            ArrayList<Double> colors = blueCalibration.getColor(frame, 3, 111);
+            ArrayList<Double> colors = blueCalibration.getColor(frame, 12, 111);
             blueHighS = new Scalar(colors.get(1), 255, 255);
-            blueLowS = new Scalar(colors.get(0), 100, 60);
+            blueLowS = new Scalar(colors.get(0), 114, 136);
             return true;
         } else {
             return false;
@@ -657,9 +666,9 @@ public class Controller {
 
         Color current = null;
         if (gameState.equals(GameState.PLAYER1_TURN)) {
-            current = Color.BLUE;
-        } else if (gameState.equals(GameState.PLAYER2_TURN)) {
             current = Color.RED;
+        } else if (gameState.equals(GameState.PLAYER2_TURN)) {
+            current = Color.BLUE;
         }
 
         gameState = GameState.PROCESSING;
@@ -703,7 +712,7 @@ public class Controller {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Pawn[][] newBoard = fp.translateCollectionToBoardMatrix(redPawns, bluePawns, greenPawns);
+        //Pawn[][] newBoard = fp.translateCollectionToBoardMatrix(redPawns, bluePawns, greenPawns);
 
         if (current != null) {
 
@@ -716,6 +725,7 @@ public class Controller {
                 System.out.println("VALIDATION: TRUE");
             } else {
                 System.out.println("VALIDATION: FALSE");
+                gameState = Color.RED.equals(current) ? GameState.PLAYER1_TURN : GameState.PLAYER2_TURN;
             }
         }
     }

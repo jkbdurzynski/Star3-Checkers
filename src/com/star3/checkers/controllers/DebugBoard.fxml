@@ -34,12 +34,12 @@
             </rowConstraints>
         </GridPane>
         <Separator layoutX="252.0" layoutY="49.0" orientation="VERTICAL" prefHeight="563.0" prefWidth="10.0" />
-        <Button fx:id="submitPlayer1" layoutX="34.0" layoutY="40.0" mnemonicParsing="false" prefHeight="192.0" prefWidth="192.0" style="-fx-background-color: #00CC00;" text="Rozpocznij grę" textAlignment="CENTER" wrapText="true">
+        <Button fx:id="submitPlayer1" layoutX="34.0" layoutY="40.0" mnemonicParsing="false" onAction="#turnPlayer1" prefHeight="192.0" prefWidth="192.0" style="-fx-background-color: #00CC00;" text="Rozpocznij grę" textAlignment="CENTER" wrapText="true">
             <font>
                 <Font size="30.0" />
             </font>
         </Button>
-        <Button fx:id="submitPlayer2" layoutX="34.0" layoutY="416.0" mnemonicParsing="false" prefHeight="194.0" prefWidth="194.0" style="-fx-background-color: #00CC00;" text="Rozpocznij grę" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+        <Button fx:id="submitPlayer2" layoutX="34.0" layoutY="416.0" mnemonicParsing="false" onAction="#turnPlayer2" prefHeight="194.0" prefWidth="194.0" style="-fx-background-color: #00CC00;" text="Rozpocznij grę" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
             <font>
                 <Font size="30.0" />
             </font>
@@ -149,11 +149,11 @@
       <HBox layoutX="789.0" layoutY="654.0" prefHeight="100.0" prefWidth="200.0">
          <children>
             <Slider fx:id="param1" orientation="VERTICAL" showTickLabels="true" value="5.0" />
-            <Slider fx:id="param2" blockIncrement="1.0" orientation="VERTICAL" showTickLabels="true" value="20.0" />
+            <Slider fx:id="param2" blockIncrement="1.0" orientation="VERTICAL" showTickLabels="true" value="21.3" />
             <Slider fx:id="param3" blockIncrement="1.0" orientation="VERTICAL" showTickLabels="true" value="12.0" />
-            <Slider fx:id="param4" blockIncrement="1.0" max="200.0" orientation="VERTICAL" showTickLabels="true" value="45.0" />
+            <Slider fx:id="param4" blockIncrement="1.0" max="200.0" orientation="VERTICAL" showTickLabels="true" value="26.0" />
             <Slider fx:id="alpha" blockIncrement="0.1" majorTickUnit="300.0" max="4.0" min="-1.0" orientation="VERTICAL" showTickLabels="true" value="2.3" />
-            <Slider fx:id="beta" max="200.0" min="-200.0" orientation="VERTICAL" showTickLabels="true" value="-120.0" />
+            <Slider fx:id="beta" max="200.0" min="-200.0" orientation="VERTICAL" showTickLabels="true" value="-140.0" />
          </children>
       </HBox>
       <Button layoutX="1018.0" layoutY="660.0" mnemonicParsing="false" onAction="#validateMove" prefHeight="44.0" prefWidth="107.0" text="Waliduj" textAlignment="CENTER">
